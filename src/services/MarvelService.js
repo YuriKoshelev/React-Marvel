@@ -1,8 +1,8 @@
-
 class MarvelService {
 
     _apiBase = 'https://gateway.marvel.com:443/v1/public/';
     _apiKey = '330b90bf324e81e9c5b107af024540f3';
+    _baseOfset = 210;
 
     getResource = async (url) => {          
         const res = await fetch(url);
@@ -13,8 +13,8 @@ class MarvelService {
         return await res.json();        
     }
 
-    getAllCharacters = async () => {
-        const res = await this.getResource(`${this._apiBase}characters?limit=9&offset=210&apikey=${this._apiKey}`);  
+    getAllCharacters = async (offset = this._baseOfset) => {
+        const res = await this.getResource(`${this._apiBase}characters?limit=9&offset=${offset}&apikey=${this._apiKey}`);  
         return res.data.results.map(this._transformCharacter)
     }
 
@@ -24,23 +24,24 @@ class MarvelService {
     }
 
     _transformCharacter = (char) => {
-        let discription = char.discription ;
-        if (!discription) discription = 'Sorry, no description'
-        else { console.log(discription.length)
-            if (discription.length > 270) discription = discription.slice(0, 270) + '...' 
+        let description = char.description ;
+        if (!description) description = 'Sorry, no description'
+        else { if (description.length > 270) description = description.slice(0, 270) + '...' 
         }
 
         if (char.comics.items.length === 0) {
-            char.comics.items.push({name: 'Sorry, no information'})
+            char.comics.items.push({name: 'Sorry, no information about this character'})
         }
+        
         return {
             id: char.id,
             name: char.name,
-            discription: discription,
+            description: description,
             thumbnail: char.thumbnail.path + '.' + char.thumbnail.extension,
             homepage: char.urls[0].url,
             wiki: char.urls[1].url,
-            comics: char.comics.items
+            comics: char.comics.items,
+            current: false          
         }
     }
 

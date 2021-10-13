@@ -1,13 +1,16 @@
 import {Component} from 'react'
 import MarvelService from '../../services/MarvelService';
+import PropTypes from 'prop-types'
 import './charList.scss';
 
 class CharList extends Component {
     
     state = {
-        //characters: {},
         loading: true,
-        error: false
+        error: false,
+        newItemLoading: false,
+        offSet: 210,
+        charEnded: false
     }
 
     marvelService = new MarvelService();
@@ -17,28 +20,45 @@ class CharList extends Component {
     }
 
     loadedCharacters = () => {
-        this.marvelService   
-            .getAllCharacters()
-            .then(this.props.onCharactersLoaded)
-            .catch(this.onError) 
+        this.onRequest()   
     }
 
-    // onCharactersLoaded = (characters) => {
-    //     this.setState({characters})
-    // }
+    onRequest = (offset) => {
+        this.onCharListLoading()
+        this.marvelService.getAllCharacters(offset)
+            .then((res) => {
+                this.props.onCharactersLoaded(res)
+                let charEnded = false 
+                if (res.length < 9) charEnded = true
+                this.setState({
+                    newItemLoading: false,
+                    offSet: this.state.offSet + 9,
+                    charEnded: charEnded
+                }) 
+              }
+            )
+            .catch(this.onError)    
+    }
+
+    onCharListLoading = () => {
+        this.setState({newItemLoading: true})
+    }
 
     render() {
-        const {characters} = this.props
-        const {onCharSelected} = this.props
+        const {characters, onCharSelected, changeActiv} = this.props
+        const {newItemLoading, offSet, charEnded} = this.state
         let elements = '';
         if (characters.length > 0) {
             elements = characters.map(elem => { 
-                let imgStyle=''
+                let imgStyle='', classLi='char__item'
                 if (elem.thumbnail.indexOf('image_not_available') !== -1) {imgStyle ='noImg'}
                 return(
-                    <li className="char__item"
+                    <li className={classLi}
                         key={elem.id}
-                        onClick={() => onCharSelected(elem.id)}>
+                        onClick={(e) => {
+                            onCharSelected(elem.id)
+                            changeActiv(elem.id)
+                        }}>
                            <img src={elem.thumbnail} alt={elem.name} className={imgStyle}/>
                            <div className="char__name">{elem.name}</div>
                     </li>
@@ -50,17 +70,22 @@ class CharList extends Component {
             <div className="char__list">
                 <ul className="char__grid">
                     {elements}
-                    {/*<li className="char__item char__item_selected">
-                        <img src={abyss} alt="abyss"/>
-                        <div className="char__name">Abyss</div>
-                    </li> */}
                 </ul>
-                <button className="button button__main button__long">
+                <button 
+                    className="button button__main button__long"
+                    disabled={newItemLoading}
+                    style={{'display': charEnded ? 'none' : 'block'}}
+                    onClick={() => this.onRequest(offSet)}>
                     <div className="inner">load more</div>
                 </button>
             </div>
         )
     }
+}
+
+CharList.propTypes = {
+    characters: PropTypes.array,
+    onCharSelected: PropTypes.func
 }
 
 export default CharList;

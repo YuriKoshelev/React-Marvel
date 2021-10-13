@@ -20,10 +20,6 @@ class RandomChar extends Component {
         //this.timerId = setInterval(this.updateChar, 3000)
     }
 
-    componentWillUnmount() {
-        //clearInterval(this.timerId)
-    }
-
     onCharLoaded = (char) => {
         this.setState({char, loading: false})
     }
@@ -79,7 +75,7 @@ class RandomChar extends Component {
 }
 
 const View = ({char}) => {
-    const {name, discription, thumbnail, homepage, wiki} = char;
+    const {name, description, thumbnail, homepage, wiki} = char;
     
     let imgStyle='randomchar__img'
     if (thumbnail.indexOf('image_not_available') !== -1) {imgStyle = imgStyle + ' noImg'}
@@ -90,7 +86,7 @@ const View = ({char}) => {
                 <div className="randomchar__info">
                     <p className="randomchar__name">{name}</p>
                     <p className="randomchar__descr">
-                        {discription}
+                        {description}
                     </p>
                     <div className="randomchar__btns">
                         <a href={homepage} className="button button__main">
