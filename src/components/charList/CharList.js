@@ -1,5 +1,6 @@
 import {Component} from 'react'
 import MarvelService from '../../services/MarvelService';
+import Spinner from '../spinner/Spinnner';
 import PropTypes from 'prop-types'
 import './charList.scss';
 
@@ -9,7 +10,7 @@ class CharList extends Component {
         loading: true,
         error: false,
         newItemLoading: false,
-        offSet: 210,
+        offSet: 310,
         charEnded: false
     }
 
@@ -52,6 +53,7 @@ class CharList extends Component {
             elements = characters.map(elem => { 
                 let imgStyle='', classLi='char__item'
                 if (elem.thumbnail.indexOf('image_not_available') !== -1) {imgStyle ='noImg'}
+                if (elem.current) classLi='char__item char__item_selected'
                 return(
                     <li className={classLi}
                         key={elem.id}
@@ -63,8 +65,9 @@ class CharList extends Component {
                            <div className="char__name">{elem.name}</div>
                     </li>
                 )
-            });
+            });    
         }
+        else {return <Spinner/>}
         
         return (
             <div className="char__list">
