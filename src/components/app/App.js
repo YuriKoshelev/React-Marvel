@@ -1,4 +1,4 @@
-import { Component } from "react";
+import {useState} from "react";
 import AppHeader from "../appHeader/AppHeader";
 import RandomChar from "../randomChar/RandomChar";
 import CharList from "../charList/CharList";
@@ -7,66 +7,50 @@ import ErrorBondary from "../errorBoundary/ErrorBondary";
 
 import decoration from '../../resources/img/vision.png';
 
-class App extends Component {
+const App = () => {
     
-    state = {
-        characters: [],
-        selectedChar: null,
-        currentCharInd: 0 
+    const [characters, setCharacters] = useState([])
+    const [selectedChar, setSelectedChar] = useState(null)
+    const [currentCharInd, setCurrentCharInd] = useState(0)
+
+    const onCharactersLoaded = (newCharacters) => {
+        setCharacters([...characters, ...newCharacters]) 
     }
 
-    onCharactersLoaded = (newCharacters) => {
-        this.setState(({characters}) => ({
-            characters: [...characters, ...newCharacters] 
-        }))
-    }
-
-    onCharSelected = id => {
-        this.setState({
-            selectedChar: id
-        })
-    }
-
-    changeActiv = (id) => { 
-        const {characters, currentCharInd} = this.state
+    const changeActiv = (id) => { 
         const index = characters.findIndex(elem => elem.id === id)
         const newArr = [...characters]
         newArr[currentCharInd].current = false
         newArr[index].current = true
         
-        this.setState({
-            characters: newArr,
-            currentCharInd: index
-        })  
-        
+        setCharacters(newArr)
+        setCurrentCharInd(index)
+        setSelectedChar(id)     
     }
 
-    render() {
-        return (
-            <div className="app">
-                <AppHeader/>
-                <main>
+    return (
+        <div className="app">
+            <AppHeader/>
+            <main>
+                <ErrorBondary>
+                    <RandomChar/>
+                </ErrorBondary>
+                <div className="char__content">
                     <ErrorBondary>
-                        <RandomChar/>
+                        <CharList onCharactersLoaded={onCharactersLoaded}
+                                characters={characters}
+                                changeActiv={changeActiv}/>
                     </ErrorBondary>
-                    <div className="char__content">
-                        <ErrorBondary>
-                            <CharList onCharSelected={this.onCharSelected}
-                                    onCharactersLoaded={this.onCharactersLoaded}
-                                    characters={this.state.characters}
-                                    changeActiv={this.changeActiv}/>
-                        </ErrorBondary>
-                        
-                        <ErrorBondary>
-                            <CharInfo charId={this.state.selectedChar}
-                                    characters={this.state.characters}/>
-                        </ErrorBondary>
-                    </div>
-                    <img className="bg-decoration" src={decoration} alt="vision"/>
-                </main>
-            </div>
-        )
-    }
+                    
+                    <ErrorBondary>
+                        <CharInfo charId={selectedChar}
+                                characters={characters}/>
+                    </ErrorBondary>
+                </div>
+                <img className="bg-decoration" src={decoration} alt="vision"/>
+            </main>
+        </div>
+    )
 }
 
 export default App;

@@ -1,31 +1,25 @@
-class MarvelService {
+import {useHttp} from '../hooks/http.hooks'
 
-    _apiBase = 'https://gateway.marvel.com:443/v1/public/';
-    _apiKey = '330b90bf324e81e9c5b107af024540f3';
-    _baseOfset = 310;
+const useMarvelService = () => {
+    const {loading, request, error, clearError} = useHttp()
 
-    getResource = async (url) => {          
-        const res = await fetch(url);
-    
-        if (!res.ok) {
-            throw new Error(`Could not fetch ${url}, status ${res.status}`);  
-        }
-        return await res.json();        
+    const _apiBase = 'https://gateway.marvel.com:443/v1/public/',
+          _apiKey = '330b90bf324e81e9c5b107af024540f3',
+          _baseOffset = 310;
+
+    const getAllCharacters = async (offset = _baseOffset) => {
+        const res = await request(`${_apiBase}characters?limit=9&offset=${offset}&apikey=${_apiKey}`);  
+        return res.data.results.map(_transformCharacter)
     }
 
-    getAllCharacters = async (offset = this._baseOfset) => {
-        const res = await this.getResource(`${this._apiBase}characters?limit=9&offset=${offset}&apikey=${this._apiKey}`);  
-        return res.data.results.map(this._transformCharacter)
+    const getCharacter = async (id) => {
+        const res = await request(`${_apiBase}characters/${id}?apikey=${_apiKey}`);  
+        return _transformCharacter(res.data.results[0])
     }
 
-    getCharacter = async (id) => {
-        const res = await this.getResource(`${this._apiBase}characters/${id}?apikey=${this._apiKey}`);  
-        return this._transformCharacter(res.data.results[0])
-    }
-
-    _transformCharacter = (char) => {
+    const _transformCharacter = (char) => {
         let description = char.description ;
-        if (!description) description = 'Sorry, no description'
+        if (!description) description = 'Sorry, no information about this character'
         else { if (description.length > 270) description = description.slice(0, 270) + '...' 
         }
 
@@ -45,6 +39,7 @@ class MarvelService {
         }
     }
 
+    return {loading, error, getAllCharacters, getCharacter, clearError}
 }
 
-export default MarvelService;
+export default useMarvelService;

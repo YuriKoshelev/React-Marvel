@@ -1,39 +1,28 @@
-import { Component } from 'react';
 import Skeleton from '../skeleton/Skeleton'
 import './charInfo.scss';
 
-class CharInfo extends Component {
-    
-    state = {
-        loading: true,
-        error: false
-    }
+const CharInfo = (props) => {
 
-    updateChar = () => {
-        const {charId, characters} = this.props
+    const updateChar = () => {
+        const {charId, characters} = props
         if (!charId) {
             return null;
         }
 
-        let char
-        const arr = characters.map(elem => {
-            if (elem.id === charId) char = elem
-        })
-        
+        const index = characters.findIndex(elem => elem.id === charId)
+        const char = characters[index]
         return(char)
 
     }
 
-    render() {
-        const char = this.updateChar()
-        const content = char ? <View char={char}/> : <Skeleton/>
+    const char = updateChar()
+    const content = char ? <View char={char}/> : <Skeleton/>
 
-        return (
-            <div className="char__info">
-                {content}
-            </div>
-        )
-    }
+    return (
+        <div className="char__info">
+            {content}
+        </div>
+    )
 }
 
 const View = ({char}) => {
@@ -66,7 +55,6 @@ const View = ({char}) => {
             <ul className="char__comics-list">    
                 {
                     comics.map((item, i) => {
-                        // eslint-disable-next-line
                         if (i > 9) return(null)
                         return (
                             <li key={i} className="char__comics-item">

@@ -15,10 +15,10 @@ class ErrorBondary extends Component {
 
     render() {
         if (this.state.error) {
-            return <ErrorMessage/>
+            return (<ErrorMessage/>)
         }
 
-        return this.props.children
+        return (this.props.children)
     }
 
 }
