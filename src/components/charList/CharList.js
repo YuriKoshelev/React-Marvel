@@ -30,9 +30,7 @@ const CharList = (props) => {
     }
 
     const {characters, changeActiv} = props
-    let elements = '';
-
-    const errorMessage = error ? <ErrorMessage/> : null
+    let elements = null;
 
     if (characters.length > 0) {
         elements = characters.map(elem => { 
@@ -68,7 +66,7 @@ const CharList = (props) => {
 
     }
     else {
-        if (error) return {errorMessage}
+        if (error) return <ErrorMessage/>
         else return <Spinner/>
     }
      

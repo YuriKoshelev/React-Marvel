@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import Skeleton from '../skeleton/Skeleton'
 import './charInfo.scss';
 
@@ -56,11 +57,24 @@ const View = ({char}) => {
                 {
                     comics.map((item, i) => {
                         if (i > 9) return(null)
-                        return (
-                            <li key={i} className="char__comics-item">
-                                {item.name}
-                            </li>
-                        ) 
+                        let comicId = item.resourceURI
+                        if (comicId) { 
+                            comicId = item.resourceURI.substr(item.resourceURI.length-5, 5)
+                            return (
+                                <li key={i} className="char__comics-item">
+                                    <Link to={`/comics/${comicId}`}>
+                                    {item.name}
+                                    </Link>
+                                </li>
+                            ) 
+                        }
+                        else {
+                            return (
+                                <li key={i} className="char__comics-item">
+                                    {item.name}
+                                </li>
+                            ) 
+                        }
                     })
                 }
             </ul>

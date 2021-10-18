@@ -16,7 +16,6 @@ const RandomChar = () => {
     }, [])
     
     const onCharLoaded = (char) => {
-        console.log(char)
         setChar(char)
     }
 
@@ -34,7 +33,7 @@ const RandomChar = () => {
     const errorMessage = error ? <ErrorMessage/> : null
     const spinner = loading ? <Spinner/> : null
     const content = (!loading && !error && char) ? <View char={char}/> : null
-    console.log(error, loading, char)
+    
     return (
         <div className="randomchar">
             {errorMessage}
