@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import {useHttp} from '../../hooks/http.hooks';
 import {lazy, Suspense} from 'react'
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import AppHeader from "../appHeader/AppHeader";

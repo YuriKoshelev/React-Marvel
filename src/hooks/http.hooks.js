@@ -1,16 +1,15 @@
 import {useState, useCallback} from 'react';
 
-
 export const useHttp = () => {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
-    const [condition, setCondition] = useState('waiting')
-    //const [cond, setCond] = useState('waiting');
-
-    //setCondition('fffffff')
-    //console.log('88888' + condition)
-
+    
+    const [process, setProcess] = useState('waiting');
+    
     const request = useCallback(async (url, method = 'GET', body = null, headers = {'Content-Type': 'application/json'}) => {
+
+        setProcess('loading')
+        console.log(process)    //выводит waiting
 
         setLoading(true)
 
@@ -29,7 +28,7 @@ export const useHttp = () => {
         } catch(e) {
             setLoading(false)
             setError(e.message)
-            setCondition('error')
+            setProcess('error')
             throw e
         }
 
@@ -37,8 +36,7 @@ export const useHttp = () => {
 
     const clearError = useCallback(() => {
         setError(null)
-        setCondition("loading")
     }, [])
 
-    return {loading, request, error, clearError, condition, setCondition}
+    return {loading, request, error, clearError, process, setProcess}
 }

@@ -11,7 +11,7 @@ const ComicsList = (props) => {
     const [newItemLoading, setNewItemLoading] = useState(false)
     const {error, getComics, loading} = useMarvelService()
     const [comicsEnd, setComicsEnd] = useState(false)
-    const {condition, setCondition} = useMarvelService()
+    const {process, setProcess} = useMarvelService()
 
     useEffect(() => {
         if (states.comics.length > 0) return(null)
@@ -29,7 +29,7 @@ const ComicsList = (props) => {
               }
             )
             .then(() => {
-                setCondition('confirmed')
+                setProcess('confirmed')
             })   
     }
 
