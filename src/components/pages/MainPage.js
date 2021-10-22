@@ -1,4 +1,5 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
+import {Helmet} from 'react-helmet'
 import RandomChar from "../randomChar/RandomChar";
 import CharList from "../charList/CharList";
 import CharInfo from "../charInfo/CharInfo";
@@ -6,42 +7,59 @@ import ErrorBondary from "../errorBoundary/ErrorBondary";
 
 import decoration from '../../resources/img/vision.png';
 
-const MainPage = () => {
+const MainPage = (props) => {
 
-    const [characters, setCharacters] = useState([])
-    const [selectedChar, setSelectedChar] = useState(null)
-    const [currentCharInd, setCurrentCharInd] = useState(0)
+    const {states} = props
 
     const onCharactersLoaded = (newCharacters) => {
-        setCharacters([...characters, ...newCharacters]) 
+        states.setCharacters([...states.characters, ...newCharacters]) 
     }
 
-    const changeActiv = (id) => { 
-        const index = characters.findIndex(elem => elem.id === id)
-        const newArr = [...characters]
-        newArr[currentCharInd].current = false
+    const setChangeId = (id) => { 
+        if (id === states.selectedChar) return(null)
+        states.setAnimation(false)  
+        states.setNewCharId(states.characters.findIndex(elem => elem.id === id))
+    }    
+
+    const changeActiv = () => {  
+        states.setAnimation(true)
+        const index = states.newCharId
+        const newArr = [...states.characters]
+        newArr[states.currentCharInd].current = false
         newArr[index].current = true
         
-        setCharacters(newArr)
-        setCurrentCharInd(index)
-        setSelectedChar(id)     
+        states.setCharacters(newArr)
+        states.setCurrentCharInd(index)
+        states.setSelectedChar(newArr[index].id)     
     }
 
     return (
         <>
+            <Helmet>
+                <meta
+                    name="description"
+                    content="Marvel information portal"
+                />
+                <title>Marvel information portal</title>
+            </Helmet>
             <ErrorBondary>
                 <RandomChar/>
             </ErrorBondary>
             <div className="char__content">
                 <ErrorBondary>
                     <CharList onCharactersLoaded={onCharactersLoaded}
-                            characters={characters}
-                            changeActiv={changeActiv}/>
+                              setChangeId={setChangeId}
+                              states={states}
+                            />
                 </ErrorBondary>
                 
                 <ErrorBondary>
-                    <CharInfo charId={selectedChar}
-                            characters={characters}/>
+                    <CharInfo charId={states.selectedChar}
+                            characters={states.characters}
+                            animation={states.animation}
+                            setAnimation={states.setAnimation}
+                            changeActiv={changeActiv}
+                            condition={states.condition}/>
                 </ErrorBondary>
             </div>
             <img className="bg-decoration" src={decoration} alt="vision"/>

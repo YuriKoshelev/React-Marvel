@@ -7,13 +7,16 @@ import './charList.scss';
 
 const CharList = (props) => {
     
+    const {onCharactersLoaded, setChangeId} = props
+    const {condition, setCondition, characters, setOffSet, offSet} = props.states
     const [newItemLoading, setNewItemLoading] = useState(false)
-    const [offSet, setOffSet] = useState(310)
     const [charEnded, setCharEnded] = useState(false)
 
     const {error, getAllCharacters} = useMarvelService();
     
     useEffect(() => {
+        if (characters.length != 0) return(null)
+        setCondition('loading')
         onRequest()
     }, [])
 
@@ -21,27 +24,29 @@ const CharList = (props) => {
         setNewItemLoading(true)
         getAllCharacters(offset)
             .then((res) => {
-                props.onCharactersLoaded(res) 
+                onCharactersLoaded(res) 
                 if (res.length < 9) setCharEnded(true)
                 setNewItemLoading(false)
                 setOffSet(offSet + 9) 
               }
-            )   
+            )
+            .then(() => {
+                setCondition('confirmed')
+            })   
     }
 
-    const {characters, changeActiv} = props
     let elements = null;
 
     if (characters.length > 0) {
         elements = characters.map(elem => { 
-            let imgStyle='', classLi='char__item'
+            let imgStyle='', classLi='char__item faded'
             if (elem.thumbnail.indexOf('image_not_available') !== -1) {imgStyle ='noImg'}
-            if (elem.current) classLi='char__item char__item_selected'
+            if (elem.current) classLi='char__item char__item_selected faded'
             return(
                 <li className={classLi}
                     key={elem.id}
                     onClick={(e) => {
-                        changeActiv(elem.id)
+                        setChangeId(elem.id)
                     }}>
                         <img src={elem.thumbnail} alt={elem.name} className={imgStyle}/>
                         <div className="char__name">{elem.name}</div>

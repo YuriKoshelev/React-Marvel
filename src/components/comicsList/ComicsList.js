@@ -5,40 +5,44 @@ import Spinner from '../spinner/Spinnner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import './comicsList.scss';
 
-const ComicsList = () => {
+const ComicsList = (props) => {
     
-    const [comics, setComics] = useState([])
+    const {states} = props
     const [newItemLoading, setNewItemLoading] = useState(false)
-    const [offSet, setOffSet] = useState(310)
     const {error, getComics, loading} = useMarvelService()
     const [comicsEnd, setComicsEnd] = useState(false)
-    
+    const {condition, setCondition} = useMarvelService()
+
     useEffect(() => {
+        if (states.comics.length > 0) return(null)
         onRequest()
     }, [])
 
-    const onRequest = (offset) => {
+    const onRequest = () => {
         setNewItemLoading(true)
-        getComics(offset)
+        getComics(states.offSetComics)
             .then((res) => {
                 onComicsLoaded(res) 
                 if (res.length < 8) setComicsEnd(true)
                 setNewItemLoading(false)
-                setOffSet(offSet + 8) 
+                states.setOffSetComics(states.offSetComics + 8) 
               }
-            )   
+            )
+            .then(() => {
+                setCondition('confirmed')
+            })   
     }
 
     const onComicsLoaded = (newComics) => {
-        setComics([...comics, ...newComics]) 
+        states.setComics([...states.comics, ...newComics]) 
     }
 
     let elements = null;
     
-    if (comics.length > 0) {
-        elements = comics.map((elem, i) => {
+    if (states.comics.length > 0) {
+        elements = states.comics.map((elem, i) => {
             return (<li key={i} 
-                        className="comics__item">
+                        className="comics__item faded">
                         <Link to={`/comics/${elem.id}`}>
                             <img src={elem.thumbnail} alt={elem.name} className="comics__item-img"/>
                             <div className="comics__item-name">{elem.name}</div>
@@ -56,7 +60,7 @@ const ComicsList = () => {
                 <button className="button button__main button__long"
                         disabled={newItemLoading}
                         style={{'display': comicsEnd ? 'none' : 'block'}}
-                        onClick={() => onRequest(offSet)}>
+                        onClick={() => onRequest()}>
                     <div className="inner">load more</div>
                 </button>
             </div>

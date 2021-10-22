@@ -1,11 +1,28 @@
 import { Link } from 'react-router-dom';
+import { Transition } from 'react-transition-group';
 import Skeleton from '../skeleton/Skeleton'
 import './charInfo.scss';
 
 const CharInfo = (props) => {
 
+    const {charId, characters, condition, animation, changeActiv} = props
+    //const {condition} = useMarvelService()
+
+    const duration = 700;
+
+    const defaultStyle = {
+        transition: `all ${duration}ms ease-in-out`,
+        opacity: 0,
+    }
+
+    const transitionStyles = {
+        entering: { opacity: 1 },
+        entered:  { opacity: 1 },
+        exiting:  { opacity: 0 },
+        exited:  { opacity: 0 },
+    };
+
     const updateChar = () => {
-        const {charId, characters} = props
         if (!charId) {
             return null;
         }
@@ -13,16 +30,37 @@ const CharInfo = (props) => {
         const index = characters.findIndex(elem => elem.id === charId)
         const char = characters[index]
         return(char)
-
     }
 
-    const char = updateChar()
-    const content = char ? <View char={char}/> : <Skeleton/>
+    const setContent = (condition, char) => {
+        switch (condition) {
+            case 'confirmed': {
+                if (!char) return <Skeleton/>
+                return <View char={char}/>
+                }
+            default:
+               return <Skeleton/>    
+        }           
+    }
+
+    const char = updateChar() 
 
     return (
-        <div className="char__info">
-            {content}
-        </div>
+        <Transition
+            in={animation} 
+            timeout={duration}
+            onExited={() => changeActiv()}>
+            {state => (
+                <div className='char__info'
+                    style={{
+                        ...defaultStyle,
+                        ...transitionStyles[state]
+                    }}>
+                    {setContent(condition, char)}
+                </div>
+            )}
+        </Transition>
+        
     )
 }
 

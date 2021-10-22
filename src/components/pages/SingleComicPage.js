@@ -1,23 +1,34 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useHistory} from 'react-router-dom';
 import {useState, useEffect} from 'react';
+import { Helmet } from 'react-helmet';
 import useMarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/Spinnner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import './singleComicPage.scss';
 
-const SingleComicPage = () => {
+const SingleComicPage = (props) => {
     const {comicId} = useParams()
     const [comic, setComic] = useState(null)
-    const {error, getComic, loading, clearError} = useMarvelService()
+    const {error, getComic, clearError} = useMarvelService()
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        updateComic()
+        const index = props.comics.findIndex(elem => elem.id == comicId)
+        const newComic = props.comics[index]
+        if (index != -1) {
+            onComicLoaded(newComic)
+            setLoading(false)        
+        } else {
+            updateComic()
+        }
     }, [comicId])
 
     const updateComic = () => {
         clearError()
+        //setLoading(true)
         getComic(comicId)
             .then(onComicLoaded)
+            .then(setLoading(false))
     }
 
     const onComicLoaded = (comic) => {
@@ -41,7 +52,14 @@ const View = ({comic}) => {
     const {title, description, pageCount, language, thumbnail, price} = comic
 
     return (
-        <div className="single-comic">
+        <div className="single-comic faded">
+            <Helmet>
+                <meta
+                    name="description"
+                    content={`${title} comics`}
+                />
+                <title>{title}</title>
+            </Helmet>
             <img src={thumbnail} alt={title} className="single-comic__img"/>
             <div className="single-comic__info">
                 <h2 className="single-comic__name">{title}</h2>
