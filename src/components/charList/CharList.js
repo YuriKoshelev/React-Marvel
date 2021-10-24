@@ -8,15 +8,16 @@ import './charList.scss';
 const CharList = (props) => {
     
     const {onCharactersLoaded, setChangeId} = props
-    const {condition, setCondition, characters, setOffSet, offSet} = props.states
+    const {characters, setOffSet, offSet} = props.states
     const [newItemLoading, setNewItemLoading] = useState(false)
     const [charEnded, setCharEnded] = useState(false)
 
-    const {error, getAllCharacters} = useMarvelService();
+    const {error, getAllCharacters, process, setProcess} = useMarvelService();
     
     useEffect(() => {
         if (characters.length != 0) return(null)
-        setCondition('loading')
+        setProcess(process)
+        console.log('process: ' + process)
         onRequest()
     }, [])
 
