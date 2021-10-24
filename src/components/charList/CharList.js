@@ -13,11 +13,9 @@ const CharList = (props) => {
     const [charEnded, setCharEnded] = useState(false)
 
     const {error, getAllCharacters, process, setProcess} = useMarvelService();
-    
+    //console.log('CharList_1: ' + process)
     useEffect(() => {
         if (characters.length != 0) return(null)
-        setProcess(process)
-        console.log('process: ' + process)
         onRequest()
     }, [])
 
@@ -32,7 +30,8 @@ const CharList = (props) => {
               }
             )
             .then(() => {
-                setCondition('confirmed')
+                setProcess('confirmed')
+                console.log('CharList: ' + process)
             })   
     }
 

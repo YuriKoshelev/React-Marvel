@@ -1,12 +1,13 @@
 import { Link } from 'react-router-dom';
 import { Transition } from 'react-transition-group';
+import useMarvelService from '../../services/MarvelService';
 import Skeleton from '../skeleton/Skeleton'
 import './charInfo.scss';
 
 const CharInfo = (props) => {
 
     const {charId, characters, condition, animation, changeActiv} = props
-    //const {condition} = useMarvelService()
+    const {process} = useMarvelService()
 
     const duration = 700;
 
@@ -32,8 +33,10 @@ const CharInfo = (props) => {
         return(char)
     }
 
-    const setContent = (condition, char) => {
-        switch (condition) {
+    const setContent = (char) => {
+        
+        console.log('Click CharInfo: '+ process)
+        switch (process) {
             case 'confirmed': {
                 if (!char) return <Skeleton/>
                 return <View char={char}/>
@@ -56,7 +59,7 @@ const CharInfo = (props) => {
                         ...defaultStyle,
                         ...transitionStyles[state]
                     }}>
-                    {setContent(condition, char)}
+                    {setContent(char)}
                 </div>
             )}
         </Transition>
