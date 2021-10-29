@@ -1,23 +1,21 @@
-import { useParams, Link, useHistory} from 'react-router-dom';
+import { useParams, Link} from 'react-router-dom';
 import {useState, useEffect} from 'react';
 import { Helmet } from 'react-helmet';
 import useMarvelService from '../../services/MarvelService';
-import Spinner from '../spinner/Spinnner';
-import ErrorMessage from '../errorMessage/ErrorMessage';
+import setContent from '../../utils/setContent';
 import './singleComicPage.scss';
 
 const SingleComicPage = (props) => {
     const {comicId} = useParams()
     const [comic, setComic] = useState(null)
-    const {error, getComic, clearError} = useMarvelService()
-    const [loading, setLoading] = useState(true)
+    const {getComic, clearError, process, setProcess} = useMarvelService()
 
     useEffect(() => {
         const index = props.comics.findIndex(elem => elem.id == comicId)
         const newComic = props.comics[index]
         if (index != -1) {
             onComicLoaded(newComic)
-            setLoading(false)        
+            setProcess('confirmed')        
         } else {
             updateComic()
         }
@@ -25,31 +23,20 @@ const SingleComicPage = (props) => {
 
     const updateComic = () => {
         clearError()
-        //setLoading(true)
         getComic(comicId)
             .then(onComicLoaded)
-            .then(setLoading(false))
+            .then(() => setProcess('confirmed'))
     }
 
     const onComicLoaded = (comic) => {
         setComic(comic)
     } 
 
-    const errorMessage = error ? <ErrorMessage/> : null
-    const spinner = loading ? <Spinner/> : null
-    const content = !(loading || error || !comic) ? <View comic={comic}/> : null
-
-    return (
-        <>
-            {errorMessage}
-            {spinner}
-            {content}
-        </>
-    )
+    return(setContent(process, View, comic))
 }
 
-const View = ({comic}) => {
-    const {title, description, pageCount, language, thumbnail, price} = comic
+const View = ({data}) => {
+    const {title, description, pageCount, language, thumbnail, price} = data
 
     return (
         <div className="single-comic faded">

@@ -59,7 +59,7 @@ const MainPage = (props) => {
                             animation={states.animation}
                             setAnimation={states.setAnimation}
                             changeActiv={changeActiv}
-                            condition={states.condition}/>
+                            process={states.process}/>
                 </ErrorBondary>
             </div>
             <img className="bg-decoration" src={decoration} alt="vision"/>

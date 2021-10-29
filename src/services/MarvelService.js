@@ -30,7 +30,7 @@ const useMarvelService = () => {
     const _transformCharacter = (char) => {
         let description = char.description ;
         if (!description) description = 'Sorry, no information about this character'
-        else { if (description.length > 270) description = description.slice(0, 270) + '...' 
+        else { if (description.length > 230) description = description.slice(0, 230) + '...' 
         }
 
         if (char.comics.items.length === 0) {

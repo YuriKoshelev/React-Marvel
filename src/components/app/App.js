@@ -21,7 +21,7 @@ const App = () => {
     const [selectedChar, setSelectedChar] = useState(null)
     const [animation, setAnimation] = useState(true)
     const [newCharId, setNewCharId] = useState(0)
-    const [condition, setCondition] = useState('waiting')
+    const [process, setProcess] = useState('waiting');
 
     const states = {
         characters: characters, setCharacters: setCharacters,
@@ -32,7 +32,7 @@ const App = () => {
         selectedChar: selectedChar, setSelectedChar: setSelectedChar,
         animation: animation, setAnimation: setAnimation,
         newCharId: newCharId, setNewCharId: setNewCharId,
-        condition: condition, setCondition: setCondition,
+        process: process, setProcess: setProcess,
     }
 
     return (
