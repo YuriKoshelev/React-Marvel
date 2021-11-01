@@ -6,24 +6,32 @@ import setContent from '../../utils/setContent';
 import './singleComicPage.scss';
 
 const SingleComicPage = (props) => {
-    const {comicId} = useParams()
+    const {id} = useParams()
     const [comic, setComic] = useState(null)
+    const {list, dataType} = props
     const {getComic, clearError, process, setProcess} = useMarvelService()
 
     useEffect(() => {
-        const index = props.comics.findIndex(elem => elem.id == comicId)
-        const newComic = props.comics[index]
-        if (index != -1) {
+        const index = list.findIndex(elem => elem.id == id)
+        console.log(id) 
+        const newComic = list[index]
+        if (index !== -1) {
             onComicLoaded(newComic)
             setProcess('confirmed')        
         } else {
             updateComic()
         }
-    }, [comicId])
+        // eslint-disable-next-line
+        return () => {
+            if (dataType === 'character') {
+                props.setList(null)
+            }  
+        }
+    }, [id])
 
     const updateComic = () => {
         clearError()
-        getComic(comicId)
+        getComic(id)
             .then(onComicLoaded)
             .then(() => setProcess('confirmed'))
     }
@@ -32,30 +40,44 @@ const SingleComicPage = (props) => {
         setComic(comic)
     } 
 
-    return(setContent(process, View, comic))
+    return(setContent(process, View, comic, dataType))
 }
 
-const View = ({data}) => {
-    const {title, description, pageCount, language, thumbnail, price} = data
+const View = (props) => {
+    const {dataType, data} = props
+    let {name, title, description, pageCount, language, thumbnail, price} = data
+
+    let fieldsComic = <>
+                        <p className="single-comic__descr">{pageCount}</p>
+                        <p className="single-comic__descr">Language: {language}</p>
+                        <div className="single-comic__price">{price}</div>
+                    </> 
+    
+    let imgStyle=null
+    let link = '/comics'
+    if (dataType === 'character') {
+        title = name
+        fieldsComic = ''
+        imgStyle = {'height' : 'auto'}
+        link = '/'
+    }    
 
     return (
         <div className="single-comic faded">
             <Helmet>
                 <meta
                     name="description"
-                    content={`${title} comics`}
+                    content={`${title} ${dataType}`}
                 />
                 <title>{title}</title>
             </Helmet>
-            <img src={thumbnail} alt={title} className="single-comic__img"/>
+            <img src={thumbnail} alt={title} className="single-comic__img" style={imgStyle}/>
             <div className="single-comic__info">
                 <h2 className="single-comic__name">{title}</h2>
                 <p className="single-comic__descr">{description}</p>
-                <p className="single-comic__descr">{pageCount}</p>
-                <p className="single-comic__descr">Language: {language}</p>
-                <div className="single-comic__price">{price}</div>
+                {fieldsComic}
             </div>
-            <Link to='/comics' className="single-comic__back">Back to all</Link>
+            <Link to={link} className="single-comic__back">Back to all</Link>
         </div>
     )
 }

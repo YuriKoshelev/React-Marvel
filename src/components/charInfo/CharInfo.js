@@ -69,6 +69,7 @@ const View = ({char}) => {
     if (thumbnail.indexOf('image_not_available') !== -1) {
         imgStyle={'objectFit' : 'fill'}
     }
+ 
     return(
         <>
             <div className="char__basics">

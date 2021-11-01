@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useMemo} from 'react';
 import { Link } from 'react-router-dom';
 import useMarvelService from '../../services/MarvelService';
 import setContent from '../../utils/setContent';
@@ -18,6 +18,7 @@ const ComicsList = (props) => {
             return(null)
         }
         onRequest()
+        // eslint-disable-next-line
     }, [])
 
     const onRequest = () => {
@@ -46,10 +47,17 @@ const ComicsList = (props) => {
         onRequest: onRequest 
     }    
 
-    return (setContent(process, View, data))     
+    const comicsListElements = useMemo(() => {
+        return(setContent(process, View, data))
+        // eslint-disable-next-line
+    }, [process, newItemLoading, states.offSetComics])
+    
+    return (comicsListElements)
+         
 }
 
 const View = ({data}) => {
+    console.log('render')
     const {states, newItemLoading, comicsEnd, onRequest} = data
 
     let elements = null; 

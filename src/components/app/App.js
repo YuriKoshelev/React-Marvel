@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import {useHttp} from '../../hooks/http.hooks';
+import { useState } from 'react';
 import {lazy, Suspense} from 'react'
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import AppHeader from "../appHeader/AppHeader";
@@ -14,6 +13,7 @@ const App = () => {
     
     const [characters, setCharacters] = useState([])
     const [comics, setComics] = useState([])
+    const [char, setChar] = useState(null)
     const [offSet, setOffSet] = useState(310)
     const [offSetComics, setOffSetComics] = useState(310)
     
@@ -33,6 +33,7 @@ const App = () => {
         animation: animation, setAnimation: setAnimation,
         newCharId: newCharId, setNewCharId: setNewCharId,
         process: process, setProcess: setProcess,
+        char: char, setChar: setChar,
     }
 
     return (
@@ -53,8 +54,14 @@ const App = () => {
                                     states={states}/>
                             </Route>
 
-                            <Route exact path='/comics/:comicId'>
-                                <SingleComicPage comics={comics}/>
+                            <Route exact path='/comics/:id'>
+                                <SingleComicPage list={comics} dataType='comic'/>
+                            </Route>
+
+                            <Route exact path='/characters/:id'>
+                                <SingleComicPage list={char} 
+                                                 setList={setChar}
+                                                 dataType='character'/>
                             </Route>
 
                             <Route path='*'>

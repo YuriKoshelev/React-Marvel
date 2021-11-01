@@ -1,4 +1,4 @@
-import {useState, useEffect, useRef} from 'react'
+import {useState, useEffect, useMemo} from 'react'
 import useMarvelService from '../../services/MarvelService';
 import setContent from '../../utils/setContent';
 import PropTypes from 'prop-types'
@@ -7,15 +7,16 @@ import './charList.scss';
 const CharList = (props) => {
     
     const {onCharactersLoaded, setChangeId} = props
-    const {characters, setOffSet, offSet, process, setProcess} = props.states
+    const {characters, setOffSet, offSet, process, setProcess, currentCharInd} = props.states
     const [newItemLoading, setNewItemLoading] = useState(false)
     const [charEnded, setCharEnded] = useState(false)
 
     const {getAllCharacters} = useMarvelService();
 
     useEffect(() => {
-        if (characters.length != 0) return(null)
+        if (characters.length !== 0) return(null)
         onRequest()
+        // eslint-disable-next-line
     }, [])
 
     const onRequest = (offset) => {
@@ -45,8 +46,12 @@ const CharList = (props) => {
         offSet: offSet 
     }
 
-    return (setContent(process, View, data))
-     
+    const charListElements = useMemo(() => {
+        return(setContent(process, View, data))
+        // eslint-disable-next-line
+    }, [process, currentCharInd, newItemLoading, offSet])
+    
+    return (charListElements)   
 }
 
 const View = ({data}) => {

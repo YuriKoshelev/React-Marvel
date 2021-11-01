@@ -1,9 +1,9 @@
-import {useState, useEffect} from "react";
 import {Helmet} from 'react-helmet'
 import RandomChar from "../randomChar/RandomChar";
 import CharList from "../charList/CharList";
 import CharInfo from "../charInfo/CharInfo";
 import ErrorBondary from "../errorBoundary/ErrorBondary";
+import CharSearchForm from '../charSearchForm/charSearchForm';
 
 import decoration from '../../resources/img/vision.png';
 
@@ -53,14 +53,20 @@ const MainPage = (props) => {
                             />
                 </ErrorBondary>
                 
-                <ErrorBondary>
-                    <CharInfo charId={states.selectedChar}
-                            characters={states.characters}
-                            animation={states.animation}
-                            setAnimation={states.setAnimation}
-                            changeActiv={changeActiv}
-                            process={states.process}/>
-                </ErrorBondary>
+                <div style={{'position': 'sticky'}}>
+                    <ErrorBondary>
+                        <CharInfo charId={states.selectedChar}
+                                characters={states.characters}
+                                animation={states.animation}
+                                setAnimation={states.setAnimation}
+                                changeActiv={changeActiv}
+                                process={states.process}/>
+                    </ErrorBondary>
+                    
+                    <ErrorBondary>
+                        <CharSearchForm char={states.char} setChar={states.setChar}/>    
+                    </ErrorBondary>
+                </div>
             </div>
             <img className="bg-decoration" src={decoration} alt="vision"/>
         </>
