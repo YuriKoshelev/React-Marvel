@@ -57,7 +57,6 @@ const ComicsList = (props) => {
 }
 
 const View = ({data}) => {
-    console.log('render')
     const {states, newItemLoading, comicsEnd, onRequest} = data
 
     let elements = null; 

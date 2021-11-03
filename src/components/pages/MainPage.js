@@ -53,7 +53,8 @@ const MainPage = (props) => {
                             />
                 </ErrorBondary>
                 
-                <div style={{'position': 'sticky'}}>
+                <div style={{'position': 'sticky',
+                            'top': '0'}}>
                     <ErrorBondary>
                         <CharInfo charId={states.selectedChar}
                                 characters={states.characters}

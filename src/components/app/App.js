@@ -7,7 +7,7 @@ import Spinner from '../spinner/Spinnner';
 const Page404 = lazy(() => import('../pages/404'));
 const MainPage = lazy(() => import('../pages/MainPage'));
 const ComicsPage = lazy(() => import('../pages/ComicsPage'));
-const SingleComicPage = lazy(() => import('../pages/SingleComicPage'));
+const SinglePage = lazy(() => import('../pages/SinglePage'));
 
 const App = () => {
     
@@ -55,11 +55,11 @@ const App = () => {
                             </Route>
 
                             <Route exact path='/comics/:id'>
-                                <SingleComicPage list={comics} dataType='comic'/>
+                                <SinglePage list={comics} dataType='comic'/>
                             </Route>
 
                             <Route exact path='/characters/:id'>
-                                <SingleComicPage list={char} 
+                                <SinglePage list={char} 
                                                  setList={setChar}
                                                  dataType='character'/>
                             </Route>

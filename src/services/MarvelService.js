@@ -29,14 +29,15 @@ const useMarvelService = () => {
 
     const getCharacterByName = async (name) => {
         const res = await request(`${_apiBase}characters?name=${name}&apikey=${_apiKey}`);  
-        console.log(res.data)
+        if (res.data.results.length === 0) return null
         return _transformCharacter(res.data.results[0])
     }
 
     const _transformCharacter = (char) => {
+        
         let description = char.description ;
         if (!description) description = 'Sorry, no information about this character'
-        else { if (description.length > 230) description = description.slice(0, 230) + '...' 
+        else { if (description.length > 225) description = description.slice(0, 225) + '...' 
         }
 
         if (char.comics.items.length === 0) {

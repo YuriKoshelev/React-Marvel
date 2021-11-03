@@ -3,55 +3,58 @@ import {useState, useEffect} from 'react';
 import { Helmet } from 'react-helmet';
 import useMarvelService from '../../services/MarvelService';
 import setContent from '../../utils/setContent';
-import './singleComicPage.scss';
+import './singlePage.scss';
 
 const SingleComicPage = (props) => {
     const {id} = useParams()
-    const [comic, setComic] = useState(null)
+    const [сurrentData , setCurrentData] = useState(null)
     const {list, dataType} = props
     const {getComic, clearError, process, setProcess} = useMarvelService()
+    const [wayCharacter , setWayCharacter] = useState(false)
 
     useEffect(() => {
         const index = list.findIndex(elem => elem.id == id)
-        console.log(id) 
-        const newComic = list[index]
+        const newData = list[index]
         if (index !== -1) {
-            onComicLoaded(newComic)
+            onDataLoaded(newData)
             setProcess('confirmed')        
         } else {
-            updateComic()
+            updateData()
         }
-        // eslint-disable-next-line
+
         return () => {
             if (dataType === 'character') {
                 props.setList(null)
             }  
         }
+        // eslint-disable-next-line
     }, [id])
 
-    const updateComic = () => {
+    const updateData = () => {
         clearError()
         getComic(id)
-            .then(onComicLoaded)
-            .then(() => setProcess('confirmed'))
+            .then(onDataLoaded)
+            .then(() => {
+                setProcess('confirmed')
+                setWayCharacter(true)})
     }
 
-    const onComicLoaded = (comic) => {
-        setComic(comic)
+    const onDataLoaded = (data) => {
+        setCurrentData(data)
     } 
 
-    return(setContent(process, View, comic, dataType))
+    return(setContent(process, View, сurrentData, dataType, wayCharacter))
 }
 
 const View = (props) => {
-    const {dataType, data} = props
+    const {dataType, data, wayCharacter} = props
     let {name, title, description, pageCount, language, thumbnail, price} = data
 
     let fieldsComic = <>
                         <p className="single-comic__descr">{pageCount}</p>
                         <p className="single-comic__descr">Language: {language}</p>
                         <div className="single-comic__price">{price}</div>
-                    </> 
+                      </> 
     
     let imgStyle=null
     let link = '/comics'
@@ -61,6 +64,8 @@ const View = (props) => {
         imgStyle = {'height' : 'auto'}
         link = '/'
     }    
+
+    if (wayCharacter) link = '/'
 
     return (
         <div className="single-comic faded">

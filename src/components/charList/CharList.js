@@ -64,7 +64,7 @@ const View = ({data}) => {
         return(
             <li className={classLi}
                 key={elem.id}
-                onClick={(e) => {
+                onClick={() => {
                     setChangeId(elem.id)
                 }}>
                     <img src={elem.thumbnail} alt={elem.name} className={imgStyle}/>

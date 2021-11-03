@@ -10,18 +10,21 @@ import './charSearchForm.scss';
 
 const CharSearchForm = (props) => {
     const {char, setChar} = props
-    const {loading, error, getCharacterByName, clearError} = useMarvelService()
-
+    const [loading, setLoading] = useState(false)
+    const {error, getCharacterByName, clearError} = useMarvelService()
+    
     const onCharLoaded = (char) => {
-        setChar([char])
+        if (char === null) setChar([]) 
+        else setChar([char])
     } 
 
     const updateChar = (name) => {
         clearError()
-    
+        setLoading(true)
         getCharacterByName(name)
             .then(onCharLoaded)
-    }
+            .finally(() => setLoading(false))
+    } 
 
     const errorMessage = error ? <div className='char__search-critical-error'><ErrorMessage/></div> : null
     const results = !char ? null : char.length > 0 ? 
