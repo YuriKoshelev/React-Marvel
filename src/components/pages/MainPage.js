@@ -2,6 +2,7 @@ import {Helmet} from 'react-helmet'
 import RandomChar from "../randomChar/RandomChar";
 import CharList from "../charList/CharList";
 import CharInfo from "../charInfo/CharInfo";
+
 import ErrorBondary from "../errorBoundary/ErrorBondary";
 import CharSearchForm from '../charSearchForm/charSearchForm';
 
