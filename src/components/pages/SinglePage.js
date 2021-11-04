@@ -13,6 +13,7 @@ const SingleComicPage = (props) => {
     const [wayCharacter , setWayCharacter] = useState(false)
 
     useEffect(() => {
+        if (list === null) return null
         const index = list.findIndex(elem => elem.id == id)
         const newData = list[index]
         if (index !== -1) {
