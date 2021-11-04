@@ -1,4 +1,4 @@
-import {useState, useEffect, useMemo} from 'react'
+import {useState, useEffect} from 'react'
 import useMarvelService from '../../services/MarvelService';
 import setContent from '../../utils/setContent';
 import PropTypes from 'prop-types'
@@ -7,7 +7,7 @@ import './charList.scss';
 const CharList = (props) => {
     
     const {onCharactersLoaded, setChangeId} = props
-    const {characters, setOffSet, offSet, process, setProcess, currentCharInd} = props.states
+    const {characters, setOffSet, offSet, process, setProcess} = props.states
     const [newItemLoading, setNewItemLoading] = useState(false)
     const [charEnded, setCharEnded] = useState(false)
 
@@ -46,26 +46,29 @@ const CharList = (props) => {
         offSet: offSet 
     }
 
-    const charListElements = useMemo(() => {
-        return(setContent(process, View, data))
-        // eslint-disable-next-line
-    }, [process, currentCharInd, newItemLoading, offSet])
-    
-    return (charListElements)   
+    return(setContent(process, View, data))
+       
 }
 
 const View = ({data}) => {
     const {characters, setChangeId, newItemLoading, charEnded, onRequest, offSet} = data
     let elements = null;
-    elements = characters.map(elem => { 
+
+    elements = characters.map((elem, i) => { 
         let imgStyle='', classLi='char__item faded'
         if (elem.thumbnail.indexOf('image_not_available') !== -1) {imgStyle ='noImg'}
         if (elem.current) classLi='char__item char__item_selected faded'
         return(
             <li className={classLi}
                 key={elem.id}
+                tabIndex={0}
                 onClick={() => {
                     setChangeId(elem.id)
+                }}
+                onKeyPress={(e) => {
+                    if (e.key === ' ' || e.key === "Enter") {
+                        setChangeId(elem.id)            
+                    }
                 }}>
                     <img src={elem.thumbnail} alt={elem.name} className={imgStyle}/>
                     <div className="char__name">{elem.name}</div>

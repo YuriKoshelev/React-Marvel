@@ -9,11 +9,11 @@ const SingleComicPage = (props) => {
     const {id} = useParams()
     const [сurrentData , setCurrentData] = useState(null)
     const {list, dataType} = props
-    const {getComic, clearError, process, setProcess} = useMarvelService()
+    const {getComic, getCharacter, clearError, process, setProcess} = useMarvelService()
     const [wayCharacter , setWayCharacter] = useState(false)
 
     useEffect(() => {
-        if (list === null) return null
+        if (list === null) return updateData()
         const index = list.findIndex(elem => elem.id == id)
         const newData = list[index]
         if (index !== -1) {
@@ -33,11 +33,20 @@ const SingleComicPage = (props) => {
 
     const updateData = () => {
         clearError()
-        getComic(id)
-            .then(onDataLoaded)
-            .then(() => {
-                setProcess('confirmed')
-                setWayCharacter(true)})
+        if (dataType === 'character') {
+            getCharacter(id)
+                .then(onDataLoaded)
+                .then(() => {
+                    setProcess('confirmed')
+                    setWayCharacter(true)})
+        }
+        else {
+            getComic(id)
+                .then(onDataLoaded)
+                .then(() => {
+                    setProcess('confirmed')
+                    setWayCharacter(true)})
+        }        
     }
 
     const onDataLoaded = (data) => {
