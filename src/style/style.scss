@@ -2,6 +2,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
 @import './button';
 
+@import 'blocks/randomChar.scss';
+@import 'blocks/appBanner.scss';
+@import 'blocks/appHeader.scss';
+@import 'blocks/charInfo.scss';
+@import 'blocks/charList.scss';
+@import 'blocks/charSearchForm.scss';
+@import 'blocks/comicsList.scss';
+@import 'blocks/singlePage.scss';
+
 * {
     font-family: "Roboto Condensed", sans-serif;
     margin: 0;
@@ -80,3 +89,5 @@ main {
         opacity: 1
     }
 }
+
+@import './media';

@@ -1,20 +1,25 @@
 import {useState, useEffect, useMemo} from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import useMarvelService from '../../services/MarvelService';
 import setContent from '../../utils/setContent';
-import './comicsList.scss';
 
-const ComicsList = (props) => {
+import {comicsFethed,
+        cmicsError,
+        comicsChangeOffSet} from '../comicsList/comicsSlice';
+
+const ComicsList = () => {
     
-    const {states} = props
     const [newItemLoading, setNewItemLoading] = useState(false)
     const {getComics} = useMarvelService()
-    const [comicsEnd, setComicsEnd] = useState(false)
-    const {process, setProcess} = useMarvelService()
+    let comicsEnd = false
+
+    const {comics, comicsLosdingStatus, comicsOffSet} = useSelector((state) => state.comics)
+
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        if (states.comics.length > 0) {
-            setProcess('confirmed')
+        if (comics.length > 0) {
             return(null)
         }
         onRequest()
@@ -23,44 +28,42 @@ const ComicsList = (props) => {
 
     const onRequest = () => {
         setNewItemLoading(true)
-        getComics(states.offSetComics)
+        getComics(comicsOffSet)
             .then((res) => {
-                onComicsLoaded(res) 
-                if (res.length < 8) setComicsEnd(true)
-                setNewItemLoading(false)
-                states.setOffSetComics(states.offSetComics + 8) 
+                dispatch(comicsChangeOffSet(comicsOffSet + 8))
+                dispatch(comicsFethed(res)) 
+                if (res.length < 8) {
+                    comicsEnd = true
+                }
+                setNewItemLoading(false) 
               }
             )
-            .then(() => {
-                setProcess('confirmed')
+            .catch(() => {
+                dispatch(cmicsError())
             })   
-    }
-
-    const onComicsLoaded = (newComics) => {
-        states.setComics([...states.comics, ...newComics]) 
     }
     
     const data = {
-        states: states,
+        comics: comics,
         newItemLoading: newItemLoading,
         comicsEnd: comicsEnd,
         onRequest: onRequest 
     }    
 
     const comicsListElements = useMemo(() => {
-        return(setContent(process, View, data))
+        return(setContent(comicsLosdingStatus, View, data))
         // eslint-disable-next-line
-    }, [process, newItemLoading, states.offSetComics])
+    }, [comicsLosdingStatus, newItemLoading, comicsOffSet])
     
     return (comicsListElements)
          
 }
 
 const View = ({data}) => {
-    const {states, newItemLoading, comicsEnd, onRequest} = data
+    const {comics, newItemLoading, comicsEnd, onRequest} = data
 
     let elements = null; 
-    elements = states.comics.map((elem, i) => {
+    elements = comics.map((elem, i) => {
         return (<li key={i} 
                     className="comics__item faded">
                     <Link to={`/comics/${elem.id}`}>

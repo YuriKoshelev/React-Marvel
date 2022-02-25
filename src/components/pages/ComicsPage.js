@@ -15,7 +15,7 @@ const ComicsPage = (props) => {
             </Helmet>
             <ErrorBondary>
                 <AppBanner/>
-                <ComicsList states={props.states}/>
+                <ComicsList/>
             </ErrorBondary>
         </>
     )

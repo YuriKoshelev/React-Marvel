@@ -1,19 +1,33 @@
 import { useParams, Link} from 'react-router-dom';
 import {useState, useEffect} from 'react';
 import { Helmet } from 'react-helmet';
+import { useDispatch, useSelector } from 'react-redux';
 import useMarvelService from '../../services/MarvelService';
 import setContent from '../../utils/setContent';
-import './singlePage.scss';
+
+import {charFethed} from '../charList/charactersSlice';
 
 const SingleComicPage = (props) => {
     const {id} = useParams()
     const [сurrentData , setCurrentData] = useState(null)
-    const {list, dataType} = props
+    const {dataType} = props
     const {getComic, getCharacter, clearError, process, setProcess} = useMarvelService()
     const [wayCharacter , setWayCharacter] = useState(false)
 
+    const {characters} = useSelector((state) => state.characters)
+    const {comics} = useSelector((state) => state.comics)
+    
+    const dispatch = useDispatch()
+
+    let list = null
+
     useEffect(() => {
-        if (list === null) return updateData()
+        if (dataType === 'comic') {
+            list = comics
+        }
+        else {
+            list = characters
+        }
         const index = list.findIndex(elem => elem.id == id)
         const newData = list[index]
         if (index !== -1) {
@@ -25,7 +39,7 @@ const SingleComicPage = (props) => {
 
         return () => {
             if (dataType === 'character') {
-                props.setList(null)
+                dispatch(charFethed(null))
             }  
         }
         // eslint-disable-next-line
@@ -75,7 +89,9 @@ const View = (props) => {
         link = '/'
     }    
 
-    if (wayCharacter) link = '/'
+    if (wayCharacter) {
+        link = '/'
+    }
 
     return (
         <div className="single-comic faded">

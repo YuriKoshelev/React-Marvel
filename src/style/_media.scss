@@ -1,0 +1,162 @@
+@media (max-width: 505px) {
+    .app {
+        width: 100%;
+        &__header {
+            flex-direction: column;
+            align-items: center;
+        }
+        &__title {
+            font-size: 25px;
+            text-align: center;
+        }
+        &__menu {
+            ul {
+                font-size: 14px;
+                line-height: 40px;
+            }
+        }
+        .randomchar {
+            grid-template-columns: repeat(1, 100%);
+            grid-template-columns: repeat(2);
+            &__block {
+                display: block;
+            }
+            &__img {
+                display: block;
+                margin: 0 auto;
+            }
+            &__title, &__decoration {
+                display: none;
+            }
+            &__name {
+                margin-top: 10px;
+                font-size: 18px;
+                text-align: center;
+            }
+            &__descr {
+                font-size: 12px;
+                text-align: center;
+            }
+            &__btns {
+                margin: 0 auto;
+            }
+            .randomchar__static {
+                padding-top: 0;
+                background-color: #fff;
+                .button__main {
+                    display: block;
+                    margin: 0 auto;
+                }
+            }
+        }
+        .char__list-none {
+            display: none;
+        }
+        .char__wrapper {
+            //display: none;
+            .char__info {
+                display: none;
+                &-activ {
+                    display: block;
+                }
+            }
+            .char__search-form {
+                .button__main {
+                    margin-left: 5px;
+                }
+            }
+        }
+        .char__back {
+            display: block;
+        }
+        .char__content {
+            grid-template-columns: 100%;
+        }
+        .char__grid {
+            grid-template-columns: repeat(2, 50%);
+            column-gap: 7px;
+            padding: 0 15px;
+        }
+        .char__item {
+            width: 158px;
+            height: auto;
+            img {
+                width: 158px;
+                height: 158px;
+            }
+        }
+        .char__name {
+            font-size: 16px;
+            text-align: center;
+            line-height: 20px;
+        }
+        &__banner {
+            height: 87px;
+            padding-left: 5px;
+            :nth-child(3) {
+                display: none;
+            }
+            img {
+                margin-top: 5px;
+                width: 120px;
+                height: 80px;
+            }
+            &-text {
+                width: 160px;
+                padding-left: 0;
+                font-size: 16px;
+                line-height: 26px;
+            }
+        }
+        .bg-decoration {
+            display: none;
+        }
+        .comics__grid {
+            grid-template-columns: repeat(1, 1fr);
+        }
+        .comics__item {
+            //grid-column: 2 / 4;
+            height: 360px;
+            a {
+                display: block;
+                position: relative;
+            }
+            .comics__item-img,  .comics__item-price {
+                display: block;
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .comics__item-price {
+                top: 350px;
+            }
+        }
+        .single-comic {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            &__img {
+                width: 225px;
+                height: 345px;
+            }
+            &__info {
+                text-align: center;
+            }
+            &__name {
+                margin-top: 5px;
+                font-size: 18px;
+            }
+            &__descr {
+                margin-top: 10px;
+                font-size: 16px;
+            }
+            &__back {
+                margin-top: 20px;
+            }
+        }
+        
+    }
+
+
+}

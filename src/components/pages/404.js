@@ -9,7 +9,6 @@ const Page404 = () => {
             <Link style={{'display': 'block', 'textAlign': 'center', 'fontWeight': 'bold', 'fontSize': '24px', 'marginTop': '30px'}} to="/">Back to main page</Link>
         </div>
     )
-
 }
 
 export default Page404

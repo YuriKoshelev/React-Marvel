@@ -6,16 +6,26 @@ import { Link } from "react-router-dom";
 import useMarvelService from "../../services/MarvelService";
 import ErrorMessage from "../errorMessage/ErrorMessage";
 
-import './charSearchForm.scss';
+import { useDispatch, useSelector } from 'react-redux';
 
-const CharSearchForm = (props) => {
-    const {char, setChar} = props
+import {charFethed} from '../charList/charactersSlice';
+
+const CharSearchForm = () => {
+    
     const [loading, setLoading] = useState(false)
     const {error, getCharacterByName, clearError} = useMarvelService()
     
+    const {char} = useSelector((state) => state.characters)
+ 
+    const dispatch = useDispatch()
+
     const onCharLoaded = (char) => {
-        if (char === null) setChar([]) 
-        else setChar([char])
+        if (char === null) {
+            dispatch(charFethed([]))
+        } 
+        else {
+            dispatch(charFethed([char]))
+        }
     } 
 
     const updateChar = (name) => {

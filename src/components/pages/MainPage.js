@@ -8,32 +8,7 @@ import CharSearchForm from '../charSearchForm/charSearchForm';
 
 import decoration from '../../resources/img/vision.png';
 
-const MainPage = (props) => {
-
-    const {states} = props
-
-    const onCharactersLoaded = (newCharacters) => {
-        states.setCharacters([...states.characters, ...newCharacters]) 
-    }
-
-    const setChangeId = (id) => { 
-        if (id === states.selectedChar) return(null)
-        states.setAnimation(false)  
-        states.setNewCharId(states.characters.findIndex(elem => elem.id === id))
-    }    
-
-    const changeActiv = () => {  
-        states.setAnimation(true)
-        const index = states.newCharId
-        const newArr = [...states.characters]
-        newArr[states.currentCharInd].current = false
-        newArr[index].current = true
-        
-        states.setCharacters(newArr)
-        states.setCurrentCharInd(index)
-        states.setSelectedChar(newArr[index].id)     
-    }
-
+const MainPage = () => {
     return (
         <>
             <Helmet>
@@ -48,25 +23,17 @@ const MainPage = (props) => {
             </ErrorBondary>
             <div className="char__content">
                 <ErrorBondary>
-                    <CharList onCharactersLoaded={onCharactersLoaded}
-                              setChangeId={setChangeId}
-                              states={states}
-                            />
+                    <CharList/>
                 </ErrorBondary>
                 
-                <div style={{'position': 'sticky',
+                <div className='char__wrapper' style={{'position': 'sticky',
                             'top': '0'}}>
                     <ErrorBondary>
-                        <CharInfo charId={states.selectedChar}
-                                characters={states.characters}
-                                animation={states.animation}
-                                setAnimation={states.setAnimation}
-                                changeActiv={changeActiv}
-                                process={states.process}/>
+                        <CharInfo/>
                     </ErrorBondary>
                     
                     <ErrorBondary>
-                        <CharSearchForm char={states.char} setChar={states.setChar}/>    
+                        <CharSearchForm/>    
                     </ErrorBondary>
                 </div>
             </div>

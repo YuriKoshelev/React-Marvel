@@ -1,15 +1,25 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect} from 'react';
 import useMarvelService from '../../services/MarvelService';
+import { useDispatch, useSelector } from 'react-redux';
 import setContent from '../../utils/setContent';
-import PropTypes from 'prop-types'
-import './charList.scss';
+import PropTypes from 'prop-types';
 
-const CharList = (props) => {
+import {charactersFethed, 
+        charactersChangeOffSet, 
+        charactersChangeActive,
+        charactersChangeAnimation,
+        charactersError,
+        charOnClick} from '../charList/charactersSlice';
+
+const CharList = () => {
     
-    const {onCharactersLoaded, setChangeId} = props
-    const {characters, setOffSet, offSet, process, setProcess} = props.states
     const [newItemLoading, setNewItemLoading] = useState(false)
     const [charEnded, setCharEnded] = useState(false)
+   
+    const {characters, charactersOffSet, charClick,
+           charactersLosdingStatus, charactersActiv} = useSelector((state) => state.characters)
+    
+    const dispatch = useDispatch()
 
     const {getAllCharacters} = useMarvelService();
 
@@ -19,23 +29,28 @@ const CharList = (props) => {
         // eslint-disable-next-line
     }, [])
 
-    const onRequest = (offset) => {
+    const onRequest = () => {
         setNewItemLoading(true)
-        getAllCharacters(offset)
-            .then((res) => {
-                onCharactersLoaded(res) 
+        getAllCharacters(charactersOffSet)
+            .then((res) => {    
                 if (res.length < 9) setCharEnded(true)
                 setNewItemLoading(false)
-                setOffSet(offSet + 9) 
+                dispatch(charactersFethed(res))
+                dispatch(charactersChangeOffSet(charactersOffSet + 9))
               }
             )
-            .then(() => {
-                setProcess('confirmed')
-            })
             .catch(() => {
-                setProcess('error')
+                dispatch(charactersError())
             })   
     }
+
+    const setChangeId = (id) => { 
+        if (id === charactersActiv) return(null)  
+        //dispatch(charactersChangeAnimation(false))
+        dispatch(charactersChangeActive(characters.findIndex(elem => elem.id === id)))
+        dispatch(charOnClick(true))
+        //dispatch(charactersChangeAnimation(true))
+    } 
 
     const data = {
         characters: characters,
@@ -43,21 +58,23 @@ const CharList = (props) => {
         newItemLoading: newItemLoading,
         charEnded: charEnded,
         onRequest: onRequest,
-        offSet: offSet 
+        offSet: charactersOffSet,
+        charactersActiv: charactersActiv,
+        charClick: charClick 
     }
 
-    return(setContent(process, View, data))
+    return(setContent(charactersLosdingStatus, View, data))
        
 }
 
 const View = ({data}) => {
-    const {characters, setChangeId, newItemLoading, charEnded, onRequest, offSet} = data
+    const {characters, setChangeId, newItemLoading, charEnded, onRequest, charactersActiv, charClick} = data
     let elements = null;
 
     elements = characters.map((elem, i) => { 
         let imgStyle='', classLi='char__item faded'
         if (elem.thumbnail.indexOf('image_not_available') !== -1) {imgStyle ='noImg'}
-        if (elem.current) classLi='char__item char__item_selected faded'
+        if (charactersActiv === i) classLi='char__item char__item_selected faded'
         return(
             <li className={classLi}
                 key={elem.id}
@@ -76,8 +93,13 @@ const View = ({data}) => {
         )
     })  
     
+    let charListClass = 'char__list'
+    if (charClick) {
+        charListClass = charListClass + ' char__list-none'
+    }
+
     return (
-        <div className="char__list">
+        <div className={charListClass}>
             <ul className="char__grid">
                 {elements}
             </ul>
@@ -85,7 +107,7 @@ const View = ({data}) => {
                 className="button button__main button__long"
                 disabled={newItemLoading}
                 style={{'display': charEnded ? 'none' : 'block'}}
-                onClick={() => onRequest(offSet)}>
+                onClick={() => onRequest()}>
                 <div className="inner">load more</div>
             </button>
         </div>
