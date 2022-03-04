@@ -116,19 +116,23 @@
         }
         .comics__item {
             //grid-column: 2 / 4;
-            height: 360px;
+            height: 400px;
             a {
-                display: block;
-                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                //position: relative;
             }
-            .comics__item-img,  .comics__item-price {
+            .comics__item-img{
                 display: block;
-                position: absolute;
-                left: 50%;
-                transform: translateX(-50%);
+                
             }
-            .comics__item-price {
-                top: 350px;
+            .comics__item-name{ 
+                display: block;
+                text-align: center;
+            }
+            .comics__item-price{
+                display: block;
             }
         }
         .single-comic {

@@ -1,70 +1,50 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Ссылка на приложение: http://marvel.ykoshelev.ru/
 
-## Available Scripts
+### О чем проект
+Это информационный портал по вселенной Марвел реализованный через Marvel API.
 
-In the project directory, you can run:
+Приложение реализовано на React + Redux Toolkit, 
 
-### `yarn start`
+### Как работает приложение
+Приложение получает данные от API по персонажам вселенной Marvel и загружает их в глобальное хранилище, в дальнейшем рендерит их на странице, за один раз загружается 9 персонажей, так же реализована подгрузка персонажей, поиска персонажа по имени и рандомная загрузка персонажа. Также при выборе персонажа реализована возможность просмотреть комиксы, в которых данный персонаж участвовал
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+В приложении есть отдельная страница для комиксов куда приходят данные по свежим комиксам с описанием и ценой, все эти загруженные данные так же хранятся в глобальном хранилище.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+В процессе перехода от персонажей к комиксам используются данные из глобального стейта без дозагрузки из API
 
-### `yarn test`
+Приложение адаптировано под мобильные устройства
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `yarn build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Link to the application: http://marvel.ykoshelev.ru/
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### What is the project about
+This is an information portal on the Marvel universe implemented through the Marvel API.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The application is implemented on React + Redux Toolkit,
 
-### `yarn eject`
+### How the app works
+The application receives data from the API on the characters of the Marvel universe and uploads them to the global storage, then renders them on the page, 9 characters are loaded at a time, character loading, character search by name and random character loading are also implemented. Also, when choosing a character, it is possible to view the comics in which this character participated
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+The application has a separate page for comics where data on fresh comics with a description and price come, all these uploaded data are also stored in a global repository.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+During the transition from characters to comics, data from the global state is used without reloading from the API
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+The application is adapted for mobile devices
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Демонстрация / Demonstration
 
-## Learn More
+#### Версия для ПК / PC version
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+[![Watch the video](desktop.png)](https://youtu.be/3wxFjcR6rnM)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### Мобильная версия / Mobile version
 
-### Code Splitting
+[![Watch the video](mobil.png)](https://youtu.be/cDchA00tEd0)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

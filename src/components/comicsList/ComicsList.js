@@ -61,14 +61,14 @@ const ComicsList = () => {
 
 const View = ({data}) => {
     const {comics, newItemLoading, comicsEnd, onRequest} = data
-
+    
     let elements = null; 
     elements = comics.map((elem, i) => {
         return (<li key={i} 
                     className="comics__item faded">
                     <Link to={`/comics/${elem.id}`}>
-                        <img src={elem.thumbnail} alt={elem.name} className="comics__item-img"/>
-                        <div className="comics__item-name">{elem.name}</div>
+                        <img src={elem.thumbnail} alt={elem.title} className="comics__item-img"/>
+                        <div className="comics__item-name">{elem.title}</div>
                         <div className="comics__item-price">{elem.price}</div>
                     </Link>
                 </li>)   
